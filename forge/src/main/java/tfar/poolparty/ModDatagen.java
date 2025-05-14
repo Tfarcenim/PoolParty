@@ -8,7 +8,7 @@ import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
@@ -19,7 +19,7 @@ import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import tfar.poolparty.init.ModBlocks;
 import tfar.poolparty.init.ModItems;
-import tfar.poolparty.item.SwimmingTubeItem;
+import tfar.poolparty.util.ItemColorFamily;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -70,9 +70,12 @@ public class ModDatagen {
                     .unlockedBy(getHasName(Items.DRIED_KELP), has(Items.DRIED_KELP))
                     .save(writer);
 
-            ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModItems.WHITE_SWIMMING_TUBE).define('#', ModItems.RUBBER)
-                    .pattern("###").pattern("# #").pattern("###").unlockedBy("has_rubber", has(ItemTags.STONE_CRAFTING_MATERIALS)).save(writer);
-
+            ItemColorFamily.SWIMMING_TUBES.map.forEach((color, swimmingTubeItem) -> {
+                ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, swimmingTubeItem)
+                        .define('#', ModItems.RUBBER)
+                        .define('c', DyeItem.byColor(color))
+                        .pattern("###").pattern("#c#").pattern("###").unlockedBy("has_rubber", has(ModItems.RUBBER)).save(writer);
+            });
         }
     }
 
@@ -97,7 +100,7 @@ public class ModDatagen {
             add(ModItems.LIGHT_GRAY_SWIMMING_TUBE, "Light Gray Swimming Tube");
             add(ModItems.CYAN_SWIMMING_TUBE, "Cyan Swimming Tube");
             add(ModItems.PURPLE_SWIMMING_TUBE, "Purple Swimming Tube");
-            add(ModItems.BLUE_SWIMMING_TUBE, "BLue Swimming Tube");
+            add(ModItems.BLUE_SWIMMING_TUBE, "Blue Swimming Tube");
             add(ModItems.BROWN_SWIMMING_TUBE, "Brown Swimming Tube");
             add(ModItems.GREEN_SWIMMING_TUBE, "Green Swimming Tube");
             add(ModItems.RED_SWIMMING_TUBE, "Red Swimming Tube");
@@ -115,6 +118,9 @@ public class ModDatagen {
         @Override
         protected void registerModels() {
             generatedItem(ModItems.RUBBER);
+            ItemColorFamily.SWIMMING_TUBES.map.forEach((color, swimmingTubeItem) -> {
+                withExistingParent(color.getName()+"_swimming_tube",modLoc("item/swimming_tube"));
+            });
         }
 
         private void generatedItem(Item item, ResourceLocation texture) {

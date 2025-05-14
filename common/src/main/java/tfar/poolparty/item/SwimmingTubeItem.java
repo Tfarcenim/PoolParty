@@ -26,7 +26,7 @@ import tfar.poolparty.client.PoolPartyClient;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class SwimmingTubeItem extends Item implements Equipable {
+public class SwimmingTubeItem extends Item implements Equipable,Colorable {
 
     private static final Predicate<Entity> ENTITY_PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
     private final DyeColor color;
@@ -101,5 +101,10 @@ public class SwimmingTubeItem extends Item implements Equipable {
 
     private SwimmingTubeEntity getTube(Level level, HitResult hitResult) {
         return new SwimmingTubeEntity(level, hitResult.getLocation().x, hitResult.getLocation().y, hitResult.getLocation().z);
+    }
+
+    @Override
+    public DyeColor color() {
+        return color;
     }
 }

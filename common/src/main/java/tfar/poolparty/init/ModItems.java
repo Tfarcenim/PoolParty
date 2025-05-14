@@ -6,7 +6,13 @@ import net.minecraft.world.item.Item;
 import tfar.poolparty.item.FloatiesItem;
 import tfar.poolparty.item.SwimmingTubeItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ModItems {
+
+    public static final List<Item> ITEMS = new ArrayList<>();
+
     public static final Item RUBBER = new Item(new Item.Properties());
     public static final BlockItem RUBBER_BLOCK = new BlockItem(ModBlocks.RUBBER_BLOCK,new Item.Properties());
 
@@ -29,7 +35,9 @@ public class ModItems {
     public static final SwimmingTubeItem BLACK_SWIMMING_TUBE = swimmingTube(DyeColor.BLACK);
 
     static SwimmingTubeItem swimmingTube(DyeColor color) {
-        return new SwimmingTubeItem(new Item.Properties().durability(128),color);
+        SwimmingTubeItem swimmingTubeItem = new SwimmingTubeItem(new Item.Properties().durability(128), color);
+        ITEMS.add(swimmingTubeItem);
+        return swimmingTubeItem;
     }
 
     public static final BlockItem SWIMMING_TUBE_HOLDER = new BlockItem(ModBlocks.SWIMMING_TUBE_HOLDER,new Item.Properties());

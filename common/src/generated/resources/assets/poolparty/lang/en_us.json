@@ -1,6 +1,21 @@
 {
   "block.poolparty.rubber_block": "Rubber Block",
+  "item.poolparty.black_swimming_tube": "Black Swimming Tube",
+  "item.poolparty.blue_swimming_tube": "Blue Swimming Tube",
+  "item.poolparty.brown_swimming_tube": "Brown Swimming Tube",
+  "item.poolparty.cyan_swimming_tube": "Cyan Swimming Tube",
+  "item.poolparty.gray_swimming_tube": "Gray Swimming Tube",
+  "item.poolparty.green_swimming_tube": "Green Swimming Tube",
+  "item.poolparty.light_blue_swimming_tube": "Light Blue Swimming Tube",
+  "item.poolparty.light_gray_swimming_tube": "Light Gray Swimming Tube",
+  "item.poolparty.lime_swimming_tube": "Lime Swimming Tube",
+  "item.poolparty.magenta_swimming_tube": "Magenta Swimming Tube",
+  "item.poolparty.orange_swimming_tube": "Orange Swimming Tube",
+  "item.poolparty.pink_swimming_tube": "Pink Swimming Tube",
+  "item.poolparty.purple_swimming_tube": "Purple Swimming Tube",
+  "item.poolparty.red_swimming_tube": "Red Swimming Tube",
   "item.poolparty.rubber": "Rubber",
-  "item.poolparty.swimming_tube": "Swimming Tube",
+  "item.poolparty.white_swimming_tube": "White Swimming Tube",
+  "item.poolparty.yellow_swimming_tube": "Yellow Swimming Tube",
   "itemGroup.poolparty": "Pool Party"
 }
