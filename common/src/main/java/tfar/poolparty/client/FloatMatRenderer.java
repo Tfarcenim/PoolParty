@@ -10,18 +10,18 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import tfar.poolparty.entity.SwimmingTubeEntity;
+import tfar.poolparty.entity.FloatMatEntity;
 import tfar.poolparty.init.ModItems;
 
-public class SwimmingTubeRenderer extends EntityRenderer<SwimmingTubeEntity> {
+public class FloatMatRenderer extends EntityRenderer<FloatMatEntity> {
     ItemRenderer itemRenderer;
-    protected SwimmingTubeRenderer(EntityRendererProvider.Context context) {
+    protected FloatMatRenderer(EntityRendererProvider.Context context) {
         super(context);
         itemRenderer = context.getItemRenderer();
     }
 
     @Override
-    public void render(SwimmingTubeEntity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    public void render(FloatMatEntity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         ItemStack stack = ModItems.WHITE_SWIMMING_TUBE.getDefaultInstance();
         poseStack.pushPose();
         float scale = 2;
@@ -31,7 +31,7 @@ public class SwimmingTubeRenderer extends EntityRenderer<SwimmingTubeEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(SwimmingTubeEntity swimmingTubeEntity) {
+    public ResourceLocation getTextureLocation(FloatMatEntity FloatMatEntity) {
         return TextureAtlas.LOCATION_BLOCKS;
     }
 }

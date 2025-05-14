@@ -1,19 +1,23 @@
-package tfar.poolparty;
+package tfar.poolparty.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.WaterlilyBlock;
@@ -294,15 +298,15 @@ public class SwimmingTubeEntity extends Entity {
         } else {
             if (this.status == Status.IN_WATER) {
                 d2 = (this.waterLevel - this.getY()) / this.getBbHeight();
-                this.invFriction = 0.9F;
+                this.invFriction = 0.9F/8;
             } else if (this.status == Status.UNDER_FLOWING_WATER) {
                 d1 = 0;
-                this.invFriction = 0.9F;
+                this.invFriction = 0.9F/8;
             } else if (this.status == Status.UNDER_WATER) {
                 d2 = 1;
-                this.invFriction = 0.45F;
+                this.invFriction = 0.45F/8;
             } else if (this.status == Status.IN_AIR) {
-                this.invFriction = 0.9F;
+                this.invFriction = 0.9F/8;
             } else if (this.status == Status.ON_LAND) {
                 this.invFriction = this.landFriction;
                 if (this.getControllingPassenger() instanceof Player) {
@@ -410,11 +414,30 @@ public class SwimmingTubeEntity extends Entity {
         if (player.isSecondaryUseActive()) {
             return InteractionResult.PASS;
         } else {
-            if (!this.level().isClientSide) {
-                return player.startRiding(this) ? InteractionResult.CONSUME : InteractionResult.PASS;
-            } else {
-                return InteractionResult.SUCCESS;
+                InteractionResultHolder<ItemStack> holder = swapWithEquipmentSlot(ModItems.WHITE_SWIMMING_TUBE, level(), player);
+                if (holder.getResult().consumesAction() && !level().isClientSide) {
+                    discard();
+                }
+
+               return holder.getResult();
+        }
+    }
+
+     InteractionResultHolder<ItemStack> swapWithEquipmentSlot(Item item, Level level, Player player) {
+        ItemStack itemstack = ModItems.WHITE_SWIMMING_TUBE.getDefaultInstance();
+        EquipmentSlot equipmentslot = Mob.getEquipmentSlotForItem(itemstack);
+        ItemStack itemstack1 = player.getItemBySlot(equipmentslot);
+        if (!EnchantmentHelper.hasBindingCurse(itemstack1) && !ItemStack.matches(itemstack, itemstack1)) {
+            if (!level.isClientSide()) {
+                player.awardStat(Stats.ITEM_USED.get(item));
             }
+
+            ItemStack itemstack2 = itemstack1.isEmpty() ? itemstack : itemstack1.copyAndClear();
+            ItemStack itemstack3 = itemstack.copyAndClear();
+            player.setItemSlot(equipmentslot, itemstack3);
+            return InteractionResultHolder.sidedSuccess(itemstack2, level.isClientSide());
+        } else {
+            return InteractionResultHolder.fail(itemstack);
         }
     }
 
@@ -424,7 +447,7 @@ public class SwimmingTubeEntity extends Entity {
     }
 
     private Item getDropItem() {
-        return ModItems.SWIMMING_TUBE;
+        return ModItems.WHITE_SWIMMING_TUBE;
     }
 
 

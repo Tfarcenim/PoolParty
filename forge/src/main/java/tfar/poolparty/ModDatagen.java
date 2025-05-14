@@ -4,12 +4,11 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
@@ -20,6 +19,7 @@ import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import tfar.poolparty.init.ModBlocks;
 import tfar.poolparty.init.ModItems;
+import tfar.poolparty.item.SwimmingTubeItem;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -31,29 +31,31 @@ public class ModDatagen {
         ExistingFileHelper helper = event.getExistingFileHelper();
         var lookup = event.getLookupProvider();
 
-        ModBlockTags blockTags = new ModBlockTags(output,lookup,helper);
+        ModBlockTags blockTags = new ModBlockTags(output, lookup, helper);
 
-        generator.addProvider(event.includeServer(),blockTags);
+        generator.addProvider(event.includeServer(), blockTags);
 
-        generator.addProvider(event.includeServer(),new ModRecipes(output));
-        generator.addProvider(event.includeServer(),ModLootTableProvider.create(output));
+        generator.addProvider(event.includeServer(), new ModRecipes(output));
+        generator.addProvider(event.includeServer(), ModLootTableProvider.create(output));
 
-        generator.addProvider(event.includeClient(),new ModLang(output));
-        generator.addProvider(event.includeClient(),new ModBlockstates(output,helper));
-        generator.addProvider(event.includeClient(),new ModItemModels(output,helper));
+        generator.addProvider(event.includeClient(), new ModLang(output));
+        generator.addProvider(event.includeClient(), new ModBlockstates(output, helper));
+        generator.addProvider(event.includeClient(), new ModItemModels(output, helper));
     }
 
     static class ModBlockTags extends BlockTagsProvider {
 
-        public ModBlockTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,ExistingFileHelper existingFileHelper) {
+        public ModBlockTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
             super(output, lookupProvider, PoolParty.MOD_ID, existingFileHelper);
         }
 
         @Override
         protected void addTags(HolderLookup.Provider provider) {
             tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.RUBBER_BLOCK);
+            tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.SWIMMING_TUBE_HOLDER);
         }
     }
+
     static class ModRecipes extends RecipeProvider {
 
         public ModRecipes(PackOutput output) {
@@ -63,9 +65,14 @@ public class ModDatagen {
         @Override
         protected void buildRecipes(Consumer<FinishedRecipe> writer) {
             nineBlockStorageRecipes(writer, RecipeCategory.REDSTONE, ModItems.RUBBER, RecipeCategory.REDSTONE, ModItems.RUBBER_BLOCK);
-            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC,ModItems.RUBBER)
-                    .unlockedBy(getHasName(Items.DRIED_KELP),has(Items.DRIED_KELP))
+            ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.RUBBER)
+                    .requires(Items.DRIED_KELP).requires(Items.DRIED_KELP)
+                    .unlockedBy(getHasName(Items.DRIED_KELP), has(Items.DRIED_KELP))
                     .save(writer);
+
+            ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModItems.WHITE_SWIMMING_TUBE).define('#', ModItems.RUBBER)
+                    .pattern("###").pattern("# #").pattern("###").unlockedBy("has_rubber", has(ItemTags.STONE_CRAFTING_MATERIALS)).save(writer);
+
         }
     }
 
@@ -77,10 +84,25 @@ public class ModDatagen {
 
         @Override
         protected void addTranslations() {
-            add(ModBlocks.RUBBER_BLOCK,"Rubber Block");
-            add(ModItems.RUBBER,"Rubber");
-            add(ModItems.SWIMMING_TUBE,"Swimming Tube");
-            add("itemGroup.poolparty","Pool Party");
+            add(ModBlocks.RUBBER_BLOCK, "Rubber Block");
+            add(ModItems.RUBBER, "Rubber");
+            add(ModItems.WHITE_SWIMMING_TUBE, "White Swimming Tube");
+            add(ModItems.ORANGE_SWIMMING_TUBE, "Orange Swimming Tube");
+            add(ModItems.MAGENTA_SWIMMING_TUBE, "Magenta Swimming Tube");
+            add(ModItems.LIGHT_BLUE_SWIMMING_TUBE, "Light Blue Swimming Tube");
+            add(ModItems.YELLOW_SWIMMING_TUBE, "Yellow Swimming Tube");
+            add(ModItems.LIME_SWIMMING_TUBE, "Lime Swimming Tube");
+            add(ModItems.PINK_SWIMMING_TUBE, "Pink Swimming Tube");
+            add(ModItems.GRAY_SWIMMING_TUBE, "Gray Swimming Tube");
+            add(ModItems.LIGHT_GRAY_SWIMMING_TUBE, "Light Gray Swimming Tube");
+            add(ModItems.CYAN_SWIMMING_TUBE, "Cyan Swimming Tube");
+            add(ModItems.PURPLE_SWIMMING_TUBE, "Purple Swimming Tube");
+            add(ModItems.BLUE_SWIMMING_TUBE, "BLue Swimming Tube");
+            add(ModItems.BROWN_SWIMMING_TUBE, "Brown Swimming Tube");
+            add(ModItems.GREEN_SWIMMING_TUBE, "Green Swimming Tube");
+            add(ModItems.RED_SWIMMING_TUBE, "Red Swimming Tube");
+            add(ModItems.BLACK_SWIMMING_TUBE,"Black Swimming Tube");
+            add("itemGroup.poolparty", "Pool Party");
         }
     }
 
@@ -95,14 +117,14 @@ public class ModDatagen {
             generatedItem(ModItems.RUBBER);
         }
 
-        private void generatedItem(Item item , ResourceLocation texture) {
+        private void generatedItem(Item item, ResourceLocation texture) {
             String path = name(item);
             singleTexture(path, mcLoc("item/generated"),
                     "layer0", texture);
         }
 
         private void generatedItem(Item item) {
-            generatedItem(item,modLoc("item/"+name(item)));
+            generatedItem(item, modLoc("item/" + name(item)));
         }
 
         protected String name(Item item) {

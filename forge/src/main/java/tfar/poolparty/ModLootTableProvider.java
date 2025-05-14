@@ -40,10 +40,8 @@ public class ModLootTableProvider extends LootTableProvider {
 
         @Override
         protected void generate() {
-
-            Set<Block> specialDrops = Set.of();
-
             dropSelf(ModBlocks.RUBBER_BLOCK);
+            dropSelf(ModBlocks.SWIMMING_TUBE_HOLDER);
         }
 
 
