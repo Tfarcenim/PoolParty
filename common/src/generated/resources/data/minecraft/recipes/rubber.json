@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "poolparty:rubber_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "poolparty:rubber"
+  }
+}
