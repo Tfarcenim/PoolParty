@@ -15,6 +15,7 @@ import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.*;
 import tfar.poolparty.init.ModItems;
+import tfar.poolparty.item.SwimmingTubeItem;
 
 public class SwimmingTubeLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> {
 
@@ -36,7 +37,7 @@ public class SwimmingTubeLayer<T extends LivingEntity, M extends HumanoidModel<T
 
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         ItemStack itemstack = livingEntity.getItemBySlot(EquipmentSlot.LEGS);
-        if (itemstack.is(ModItems.WHITE_SWIMMING_TUBE)) {
+        if (itemstack.getItem() instanceof SwimmingTubeItem) {
             Item item = itemstack.getItem();
             poseStack.pushPose();
             poseStack.scale(this.scaleX, this.scaleY, this.scaleZ);

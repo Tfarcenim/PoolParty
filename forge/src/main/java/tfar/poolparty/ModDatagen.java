@@ -148,6 +148,7 @@ public class ModDatagen {
         @Override
         protected void registerStatesAndModels() {
             simpleBlockWithItem(ModBlocks.RUBBER_BLOCK, models().getExistingFile(modLoc("block/rubber_block")));
+            simpleBlockWithItem(ModBlocks.SWIMMING_TUBE_HOLDER, models().getExistingFile(modLoc("block/swimming_tube_holder")));
         }
     }
 }

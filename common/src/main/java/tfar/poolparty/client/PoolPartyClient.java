@@ -2,8 +2,10 @@ package tfar.poolparty.client;
 
 import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.world.entity.player.Player;
+import tfar.poolparty.init.ModBlockEntity;
 import tfar.poolparty.init.ModEntities;
 import tfar.poolparty.util.ItemColorFamily;
 
@@ -12,7 +14,7 @@ public class PoolPartyClient {
     public static void renderers() {
         EntityRenderers.register(ModEntities.SWIMMING_TUBE,SwimmingTubeRenderer::new);
         EntityRenderers.register(ModEntities.FLOAT_MAT,FloatMatRenderer::new);
-
+        BlockEntityRenderers.register(ModBlockEntity.SWIMMING_TUBE_HOLDER, SwimmingTubeHolderBlockEntityRenderer::new);
 
     }
 

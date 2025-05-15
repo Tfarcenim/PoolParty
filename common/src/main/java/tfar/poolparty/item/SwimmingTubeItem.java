@@ -65,7 +65,7 @@ public class SwimmingTubeItem extends Item implements Equipable,Colorable {
             }
 
             if (hitresult.getType() == HitResult.Type.BLOCK) {
-                SwimmingTubeEntity tube = this.getTube(level, hitresult);
+                SwimmingTubeEntity tube = this.getTube(level, hitresult,itemstack);
                 tube.setYRot(player.getYRot());
                 if (!level.noCollision(tube, tube.getBoundingBox())) {
                     return InteractionResultHolder.fail(itemstack);
@@ -99,8 +99,8 @@ public class SwimmingTubeItem extends Item implements Equipable,Colorable {
         }
     }
 
-    private SwimmingTubeEntity getTube(Level level, HitResult hitResult) {
-        return new SwimmingTubeEntity(level, hitResult.getLocation().x, hitResult.getLocation().y, hitResult.getLocation().z);
+    private SwimmingTubeEntity getTube(Level level, HitResult hitResult,ItemStack stack) {
+        return new SwimmingTubeEntity(level, hitResult.getLocation().x, hitResult.getLocation().y, hitResult.getLocation().z,stack);
     }
 
     @Override

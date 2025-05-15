@@ -11,7 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import tfar.poolparty.entity.SwimmingTubeEntity;
-import tfar.poolparty.init.ModItems;
 
 public class SwimmingTubeRenderer extends EntityRenderer<SwimmingTubeEntity> {
     ItemRenderer itemRenderer;
@@ -22,11 +21,8 @@ public class SwimmingTubeRenderer extends EntityRenderer<SwimmingTubeEntity> {
 
     @Override
     public void render(SwimmingTubeEntity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        ItemStack stack = ModItems.WHITE_SWIMMING_TUBE.getDefaultInstance();
-        poseStack.pushPose();
-        float scale = 2;
+        ItemStack stack = entity.getItem();
         itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED,packedLight, OverlayTexture.NO_OVERLAY,poseStack,buffer,entity.level(),0);
-        poseStack.popPose();
         super.render(entity, entityYaw, partialTick, poseStack, buffer, packedLight);
     }
 

@@ -6,10 +6,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegisterEvent;
-import tfar.poolparty.init.ModBlocks;
-import tfar.poolparty.init.ModCreativeModeTab;
-import tfar.poolparty.init.ModEntities;
-import tfar.poolparty.init.ModItems;
+import tfar.poolparty.init.*;
 
 @Mod(PoolParty.MOD_ID)
 public class PoolPartyForge {
@@ -60,6 +57,8 @@ public class PoolPartyForge {
         event.register(Registries.ITEM,PoolParty.id("pool_noodle"),() -> ModItems.POOL_NOODLE);
 
         event.register(Registries.CREATIVE_MODE_TAB,PoolParty.id("tab"),() -> ModCreativeModeTab.TAB);
+
+        event.register(Registries.BLOCK_ENTITY_TYPE,PoolParty.id("swimming_tube_holder"),() -> ModBlockEntity.SWIMMING_TUBE_HOLDER);
 
         event.register(Registries.ENTITY_TYPE,PoolParty.id("swimming_tube"),() -> ModEntities.SWIMMING_TUBE);
         event.register(Registries.ENTITY_TYPE,PoolParty.id("float_mat"),() -> ModEntities.FLOAT_MAT);

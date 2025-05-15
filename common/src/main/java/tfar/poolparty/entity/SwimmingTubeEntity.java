@@ -41,6 +41,8 @@ public class SwimmingTubeEntity extends Entity {
     private static final EntityDataAccessor<Integer> DATA_ID_HURTDIR = SynchedEntityData.defineId(SwimmingTubeEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> DATA_ID_DAMAGE = SynchedEntityData.defineId(SwimmingTubeEntity.class, EntityDataSerializers.FLOAT);
 
+    private static final EntityDataAccessor<ItemStack> DATA_ITEM = SynchedEntityData.defineId(SwimmingTubeEntity.class, EntityDataSerializers.ITEM_STACK);
+
     private float invFriction;
 
     private float deltaRotation;
@@ -60,12 +62,13 @@ public class SwimmingTubeEntity extends Entity {
         super(entityType, level);
     }
 
-    public SwimmingTubeEntity(Level level, double x, double y, double z) {
+    public SwimmingTubeEntity(Level level, double x, double y, double z,ItemStack stack) {
         this(ModEntities.SWIMMING_TUBE, level);
         this.setPos(x, y, z);
         this.xo = x;
         this.yo = y;
         this.zo = z;
+        setItem(stack);
     }
 
     @Override
@@ -443,11 +446,7 @@ public class SwimmingTubeEntity extends Entity {
 
 
     protected void destroy(DamageSource damageSource) {
-        this.spawnAtLocation(this.getDropItem());
-    }
-
-    private Item getDropItem() {
-        return ModItems.WHITE_SWIMMING_TUBE;
+        this.spawnAtLocation(this.getItem());
     }
 
 
@@ -484,11 +483,31 @@ public class SwimmingTubeEntity extends Entity {
         return this.entityData.get(DATA_ID_HURT);
     }
 
+    public ItemStack getItem() {
+        return this.getEntityData().get(DATA_ITEM);
+    }
+
+    /**
+     * Sets the item that this entity represents.
+     */
+    public void setItem(ItemStack stack) {
+        this.getEntityData().set(DATA_ITEM, stack);
+    }
+
+    @Override
+    public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+        super.onSyncedDataUpdated(key);
+        if (DATA_ITEM.equals(key)) {
+            this.getItem().setEntityRepresentation(this);
+        }
+    }
+
     @Override
     protected void defineSynchedData() {
         this.entityData.define(DATA_ID_HURT, 0);
         this.entityData.define(DATA_ID_HURTDIR, 1);
         this.entityData.define(DATA_ID_DAMAGE, 0.0F);
+        entityData.define(DATA_ITEM,ItemStack.EMPTY);
     }
 
     @Override
