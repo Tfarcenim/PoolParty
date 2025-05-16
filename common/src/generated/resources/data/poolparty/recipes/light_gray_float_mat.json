@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "poolparty:rubber"
+    },
+    "c": {
+      "item": "minecraft:light_gray_dye"
+    }
+  },
+  "pattern": [
+    "#c#",
+    "###"
+  ],
+  "result": {
+    "item": "poolparty:light_gray_float_mat"
+  },
+  "show_notification": true
+}

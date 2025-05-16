@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "poolparty:block/pink_pool_noodle",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "poolparty:block/pink_pool_noodle",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "poolparty:block/pink_pool_noodle",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "poolparty:block/pink_pool_noodle",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "poolparty:block/pink_pool_noodle"
+    },
+    "facing=west": {
+      "model": "poolparty:block/pink_pool_noodle",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

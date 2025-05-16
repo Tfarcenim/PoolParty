@@ -3,7 +3,6 @@ package tfar.poolparty.client;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
@@ -14,7 +13,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.item.*;
-import tfar.poolparty.init.ModItems;
 import tfar.poolparty.item.SwimmingTubeItem;
 
 public class SwimmingTubeLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> {
@@ -23,11 +21,11 @@ public class SwimmingTubeLayer<T extends LivingEntity, M extends HumanoidModel<T
     private final float scaleY;
     private final float scaleZ;
     ItemRenderer itemRenderer;
-    public SwimmingTubeLayer(RenderLayerParent<T, M> renderer, EntityModelSet modelSet, ItemRenderer itemInHandRenderer) {
-        this(renderer, modelSet, 1.0F, 1.0F, 1.0F, itemInHandRenderer);
+    public SwimmingTubeLayer(RenderLayerParent<T, M> renderer, ItemRenderer itemInHandRenderer) {
+        this(renderer, 1.0F, 1.0F, 1.0F, itemInHandRenderer);
     }
 
-    public SwimmingTubeLayer(RenderLayerParent<T, M> renderer, EntityModelSet modelSet, float scaleX, float scaleY, float scaleZ, ItemRenderer itemRenderer) {
+    public SwimmingTubeLayer(RenderLayerParent<T, M> renderer, float scaleX, float scaleY, float scaleZ, ItemRenderer itemRenderer) {
         super(renderer);
         this.scaleX = scaleX;
         this.scaleY = scaleY;

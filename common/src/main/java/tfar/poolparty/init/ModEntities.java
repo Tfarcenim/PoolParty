@@ -10,5 +10,5 @@ public class ModEntities {
             .sized(1.125F, 0.3125f).build("");
 
     public static final EntityType<FloatMatEntity> FLOAT_MAT = EntityType.Builder.<FloatMatEntity>of(FloatMatEntity::new, MobCategory.MISC)
-            .sized(1.5F, 0.5f).build("");
+            .sized(1.5F, 0.4375f).build("");
 }

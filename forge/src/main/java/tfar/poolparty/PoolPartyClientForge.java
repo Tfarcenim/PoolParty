@@ -9,6 +9,7 @@ public class PoolPartyClientForge {
     public static void onInit(IEventBus bus) {
         bus.addListener(PoolPartyClientForge::renderers);
         bus.addListener(PoolPartyClientForge::itemColors);
+        bus.addListener(PoolPartyClientForge::blockColors);
     }
 
     static void renderers(EntityRenderersEvent.RegisterRenderers event){
@@ -17,5 +18,9 @@ public class PoolPartyClientForge {
 
     static void itemColors(RegisterColorHandlersEvent.Item event) {
         PoolPartyClient.itemcolors(event.getItemColors());
+    }
+
+    static void blockColors(RegisterColorHandlersEvent.Block event) {
+        PoolPartyClient.blockcolors(event.getBlockColors());
     }
 }

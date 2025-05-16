@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "poolparty:rubber"
+    },
+    "c": {
+      "item": "minecraft:blue_dye"
+    }
+  },
+  "pattern": [
+    "#c#"
+  ],
+  "result": {
+    "item": "poolparty:blue_floaties"
+  },
+  "show_notification": true
+}

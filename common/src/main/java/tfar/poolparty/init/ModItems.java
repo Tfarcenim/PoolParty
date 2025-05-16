@@ -3,10 +3,13 @@ package tfar.poolparty.init;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import tfar.poolparty.item.FloatMatItem;
 import tfar.poolparty.item.FloatiesItem;
+import tfar.poolparty.item.PoolNoodleItem;
 import tfar.poolparty.item.SwimmingTubeItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ModItems {
@@ -41,9 +44,30 @@ public class ModItems {
     }
 
     public static final BlockItem SWIMMING_TUBE_HOLDER = new BlockItem(ModBlocks.SWIMMING_TUBE_HOLDER,new Item.Properties());
-    public static final Item FLOATIES = new FloatiesItem(new Item.Properties().durability(64));
-    public static final Item FLOAT_MAT = new FloatiesItem(new Item.Properties().durability(64));
-    public static final Item POOL_NOODLE = new Item(new Item.Properties());
+    public static final List<FloatiesItem> FLOATIES = Arrays.stream(DyeColor.values()).map(ModItems::floaties).toList();
+
+    static FloatiesItem floaties(DyeColor color) {
+        FloatiesItem swimmingTubeItem = new FloatiesItem(new Item.Properties().durability(128), color);
+        ITEMS.add(swimmingTubeItem);
+        return swimmingTubeItem;
+    }
+
+
+    public static final List<FloatMatItem> FLOAT_MATS = Arrays.stream(DyeColor.values()).map(ModItems::floatMats).toList();
+
+    static FloatMatItem floatMats(DyeColor color) {
+        FloatMatItem swimmingTubeItem = new FloatMatItem(new Item.Properties(), color);
+        ITEMS.add(swimmingTubeItem);
+        return swimmingTubeItem;
+    }
+
+    public static final List<PoolNoodleItem> POOL_NOODLES = Arrays.stream(DyeColor.values()).map(ModItems::poolNoodle).toList();
+
+    static PoolNoodleItem poolNoodle(DyeColor color) {
+        PoolNoodleItem swimmingTubeItem = new PoolNoodleItem(ModBlocks.POOL_NOODLES.get(color.ordinal()),new Item.Properties());
+        ITEMS.add(swimmingTubeItem);
+        return swimmingTubeItem;
+    }
 }
 //Swimming Tube Holder
 //Function
@@ -93,7 +117,11 @@ public class ModItems {
 //Pool Noodle
 //Function
 //
-//A knockback stick that deals no damage. The knockback is equivalent to KB2 and the durability of a wooden sword. It can be placed multi directionally like a sign, as well as be placed on the surface of the water. Being placed on the surface of the water allows other blocks to be placed against it. Useful for those times you need to place some blocks on water but don’t want to build over to the starting point. It’s also physically interactable, so you can stand on it.
+//A knockback stick that deals no damage. The knockback is equivalent to KB2 and the durability of a wooden sword.
+// It can be placed multi directionally like a sign, as well as be placed on the surface of the water.
+// Being placed on the surface of the water allows other blocks to be placed against it.
+// Useful for those times you need to place some blocks on water but don’t want to build over to the starting point.
+// It’s also physically interactable, so you can stand on it.
 //
 //
 //Visuals

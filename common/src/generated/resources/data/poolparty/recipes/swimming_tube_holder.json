@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "c": {
+      "item": "minecraft:stone_slab"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "s",
+    "s",
+    "c"
+  ],
+  "result": {
+    "item": "poolparty:swimming_tube_holder"
+  },
+  "show_notification": true
+}

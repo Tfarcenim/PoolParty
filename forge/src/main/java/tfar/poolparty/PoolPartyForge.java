@@ -31,6 +31,10 @@ public class PoolPartyForge {
         event.register(Registries.BLOCK,PoolParty.id("rubber_block"),() -> ModBlocks.RUBBER_BLOCK);
         event.register(Registries.BLOCK,PoolParty.id("swimming_tube_holder"),() -> ModBlocks.SWIMMING_TUBE_HOLDER);
 
+        ModBlocks.POOL_NOODLES.forEach(floatiesItem -> event.register(Registries.BLOCK,PoolParty.id(floatiesItem.color().getName()+"_pool_noodle"),
+                () -> floatiesItem));
+
+
         event.register(Registries.ITEM,PoolParty.id("rubber_block"),() -> ModItems.RUBBER_BLOCK);
         event.register(Registries.ITEM,PoolParty.id("rubber"),() -> ModItems.RUBBER);
 
@@ -52,9 +56,18 @@ public class PoolPartyForge {
         event.register(Registries.ITEM,PoolParty.id("black_swimming_tube"),() -> ModItems.BLACK_SWIMMING_TUBE);
 
         event.register(Registries.ITEM,PoolParty.id("swimming_tube_holder"),() -> ModItems.SWIMMING_TUBE_HOLDER);
-        event.register(Registries.ITEM,PoolParty.id("floaties"),() -> ModItems.FLOATIES);
-        event.register(Registries.ITEM,PoolParty.id("float_mat"),() -> ModItems.FLOAT_MAT);
-        event.register(Registries.ITEM,PoolParty.id("pool_noodle"),() -> ModItems.POOL_NOODLE);
+
+        ModItems.FLOATIES.forEach(floatiesItem -> event.register(Registries.ITEM,PoolParty.id(floatiesItem.color().getName()+"_floaties"),
+                () -> floatiesItem));
+
+        ModItems.FLOAT_MATS.forEach(floatiesItem -> event.register(Registries.ITEM,PoolParty.id(floatiesItem.color().getName()+"_float_mat"),
+                () -> floatiesItem));
+
+        ModItems.POOL_NOODLES.forEach(floatiesItem -> event.register(Registries.ITEM,PoolParty.id(floatiesItem.color.getName()+"_pool_noodle"),
+                () -> floatiesItem));
+
+
+
 
         event.register(Registries.CREATIVE_MODE_TAB,PoolParty.id("tab"),() -> ModCreativeModeTab.TAB);
 

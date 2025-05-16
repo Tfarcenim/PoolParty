@@ -5,24 +5,34 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.LanguageProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
+import org.codehaus.plexus.util.StringUtils;
 import tfar.poolparty.init.ModBlocks;
 import tfar.poolparty.init.ModItems;
+import tfar.poolparty.util.BlockColorFamily;
 import tfar.poolparty.util.ItemColorFamily;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class ModDatagen {
     static void gather(GatherDataEvent event) {
@@ -65,6 +75,14 @@ public class ModDatagen {
         @Override
         protected void buildRecipes(Consumer<FinishedRecipe> writer) {
             nineBlockStorageRecipes(writer, RecipeCategory.REDSTONE, ModItems.RUBBER, RecipeCategory.REDSTONE, ModItems.RUBBER_BLOCK);
+
+            ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, ModItems.SWIMMING_TUBE_HOLDER)
+                    .define('s', Items.STICK)
+                    .define('c', Items.STONE_SLAB)
+                    .pattern("s")
+                    .pattern("s")
+                    .pattern("c").unlockedBy("has_slab", has(Items.STONE_SLAB)).save(writer);
+
             ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ModItems.RUBBER)
                     .requires(Items.DRIED_KELP).requires(Items.DRIED_KELP)
                     .unlockedBy(getHasName(Items.DRIED_KELP), has(Items.DRIED_KELP))
@@ -76,6 +94,33 @@ public class ModDatagen {
                         .define('c', DyeItem.byColor(color))
                         .pattern("###").pattern("#c#").pattern("###").unlockedBy("has_rubber", has(ModItems.RUBBER)).save(writer);
             });
+
+            ItemColorFamily.FLOATIES.map.forEach((color, swimmingTubeItem) -> {
+                ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, swimmingTubeItem)
+                        .define('#', ModItems.RUBBER)
+                        .define('c', DyeItem.byColor(color))
+                        .pattern("#c#").unlockedBy("has_rubber", has(ModItems.RUBBER)).save(writer);
+            });
+
+            ItemColorFamily.FLOAT_MATS.map.forEach((color, swimmingTubeItem) -> {
+                ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, swimmingTubeItem)
+                        .define('#', ModItems.RUBBER)
+                        .define('c', DyeItem.byColor(color))
+                        .pattern("#c#")
+                        .pattern("###").unlockedBy("has_rubber", has(ModItems.RUBBER)).save(writer);
+            });
+
+            ItemColorFamily.POOL_NOODLES.map.forEach((color, swimmingTubeItem) -> {
+                ShapedRecipeBuilder.shaped(RecipeCategory.DECORATIONS, swimmingTubeItem)
+                        .define('#', ModItems.RUBBER)
+                        .define('c', DyeItem.byColor(color))
+                        .pattern("c#")
+                        .pattern(" #")
+                        .pattern(" #").unlockedBy("has_rubber", has(ModItems.RUBBER)).save(writer);
+            });
+
+
+
         }
     }
 
@@ -87,25 +132,52 @@ public class ModDatagen {
 
         @Override
         protected void addTranslations() {
-            add(ModBlocks.RUBBER_BLOCK, "Rubber Block");
-            add(ModItems.RUBBER, "Rubber");
-            add(ModItems.WHITE_SWIMMING_TUBE, "White Swimming Tube");
-            add(ModItems.ORANGE_SWIMMING_TUBE, "Orange Swimming Tube");
-            add(ModItems.MAGENTA_SWIMMING_TUBE, "Magenta Swimming Tube");
-            add(ModItems.LIGHT_BLUE_SWIMMING_TUBE, "Light Blue Swimming Tube");
-            add(ModItems.YELLOW_SWIMMING_TUBE, "Yellow Swimming Tube");
-            add(ModItems.LIME_SWIMMING_TUBE, "Lime Swimming Tube");
-            add(ModItems.PINK_SWIMMING_TUBE, "Pink Swimming Tube");
-            add(ModItems.GRAY_SWIMMING_TUBE, "Gray Swimming Tube");
-            add(ModItems.LIGHT_GRAY_SWIMMING_TUBE, "Light Gray Swimming Tube");
-            add(ModItems.CYAN_SWIMMING_TUBE, "Cyan Swimming Tube");
-            add(ModItems.PURPLE_SWIMMING_TUBE, "Purple Swimming Tube");
-            add(ModItems.BLUE_SWIMMING_TUBE, "Blue Swimming Tube");
-            add(ModItems.BROWN_SWIMMING_TUBE, "Brown Swimming Tube");
-            add(ModItems.GREEN_SWIMMING_TUBE, "Green Swimming Tube");
-            add(ModItems.RED_SWIMMING_TUBE, "Red Swimming Tube");
-            add(ModItems.BLACK_SWIMMING_TUBE,"Black Swimming Tube");
+            BuiltInRegistries.ITEM.stream().filter(item -> BuiltInRegistries.ITEM.getKey(item).getNamespace().equals(PoolParty.MOD_ID)).forEach(item -> {
+                addDefaultItem(() -> item);
+            });
+
             add("itemGroup.poolparty", "Pool Party");
+        }
+
+        protected void addDefaultItem(Supplier<? extends Item> supplier) {
+            addItem(supplier,getNameFromItem(supplier.get()));
+        }
+
+        protected void addDefaultBlock(Supplier<? extends Block> supplier) {
+            addBlock(supplier,getNameFromBlock(supplier.get()));
+        }
+
+        protected void addDefaultEnchantment(Supplier<? extends Enchantment> supplier) {
+            addEnchantment(supplier,getNameFromEnchantment(supplier.get()));
+        }
+
+        protected void addDefaultEntityType(Supplier<EntityType<?>> supplier) {
+            addEntityType(supplier,getNameFromEntity(supplier.get()));
+        }
+
+        public static String getNameFromItem(Item item) {
+            return StringUtils.capitaliseAllWords(item.getDescriptionId().split("\\.")[2].replace("_", " "));
+        }
+
+        public static String getNameFromBlock(Block block) {
+            return StringUtils.capitaliseAllWords(block.getDescriptionId().split("\\.")[2].replace("_", " "));
+        }
+
+        public static String getNameFromEnchantment(Enchantment enchantment) {
+            return StringUtils.capitaliseAllWords(enchantment.getDescriptionId().split("\\.")[2].replace("_", " "));
+        }
+
+        public static String getNameFromEntity(EntityType<?> entity) {
+            return StringUtils.capitaliseAllWords(entity.getDescriptionId().split("\\.")[2].replace("_", " "));
+        }
+
+        protected void addTextComponent(MutableComponent component, String text) {
+            ComponentContents contents = component.getContents();
+            if (contents instanceof TranslatableContents translatableContents) {
+                add(translatableContents.getKey(),text);
+            } else {
+                throw new UnsupportedOperationException(component +" is not translatable");
+            }
         }
     }
 
@@ -118,8 +190,17 @@ public class ModDatagen {
         @Override
         protected void registerModels() {
             generatedItem(ModItems.RUBBER);
+
             ItemColorFamily.SWIMMING_TUBES.map.forEach((color, swimmingTubeItem) -> {
                 withExistingParent(color.getName()+"_swimming_tube",modLoc("item/swimming_tube"));
+            });
+
+            ItemColorFamily.FLOATIES.map.forEach((color, swimmingTubeItem) -> {
+                withExistingParent(color.getName()+"_floaties",modLoc("item/floaties"));
+            });
+
+            ItemColorFamily.FLOAT_MATS.map.forEach((color, swimmingTubeItem) -> {
+                withExistingParent(color.getName()+"_float_mat",modLoc("item/float_mat"));
             });
         }
 
@@ -149,6 +230,14 @@ public class ModDatagen {
         protected void registerStatesAndModels() {
             simpleBlockWithItem(ModBlocks.RUBBER_BLOCK, models().getExistingFile(modLoc("block/rubber_block")));
             simpleBlockWithItem(ModBlocks.SWIMMING_TUBE_HOLDER, models().getExistingFile(modLoc("block/swimming_tube_holder")));
+
+            BlockColorFamily.POOL_NOODLES.map.forEach((color, poolNoodleBlock) -> {
+                ModelFile modelFile = models().withExistingParent("block/"+color.getName()+"_pool_noodle",modLoc("block/pool_noodle"));
+
+                directionalBlock(poolNoodleBlock,modelFile);
+
+                simpleBlockItem(poolNoodleBlock,modelFile);
+            });
         }
     }
 }

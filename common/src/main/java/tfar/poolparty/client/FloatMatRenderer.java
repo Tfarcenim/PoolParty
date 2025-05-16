@@ -1,6 +1,7 @@
 package tfar.poolparty.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -22,9 +23,10 @@ public class FloatMatRenderer extends EntityRenderer<FloatMatEntity> {
 
     @Override
     public void render(FloatMatEntity entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        ItemStack stack = ModItems.WHITE_SWIMMING_TUBE.getDefaultInstance();
+        ItemStack stack = entity.getItem();
         poseStack.pushPose();
-        float scale = 2;
+        poseStack.mulPose(Axis.YP.rotationDegrees(270 - entityYaw));
+        poseStack.translate(0,1/8d,0);
         itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED,packedLight, OverlayTexture.NO_OVERLAY,poseStack,buffer,entity.level(),0);
         poseStack.popPose();
         super.render(entity, entityYaw, partialTick, poseStack, buffer, packedLight);

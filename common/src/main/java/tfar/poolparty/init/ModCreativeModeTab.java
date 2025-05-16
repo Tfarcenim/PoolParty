@@ -11,12 +11,10 @@ public class ModCreativeModeTab {
                 output.accept(ModItems.RUBBER);
                 output.accept(ModItems.RUBBER_BLOCK);
 
-                ItemColorFamily.SWIMMING_TUBES.map.forEach((color, swimmingTubeItem) -> output.accept(swimmingTubeItem));
-
                 output.accept(ModItems.SWIMMING_TUBE_HOLDER);
-                output.accept(ModItems.FLOATIES);
-                output.accept(ModItems.FLOAT_MAT);
-                output.accept(ModItems.POOL_NOODLE);
+
+                ItemColorFamily.FAMILIES.forEach(itemColorFamily -> itemColorFamily.map.forEach((color, colorable) -> output.accept(colorable)));
+
             })
             .build();
 }

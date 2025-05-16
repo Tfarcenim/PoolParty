@@ -23,7 +23,7 @@ public class SwimmingTubeHolderBlockEntityRenderer implements BlockEntityRendere
         for (int i = 0; i < items.size(); i++) {
             ItemStack itemStack = items.get(i);
             poseStack.pushPose();
-            poseStack.translate(.5,i * .375,.5);
+            poseStack.translate(.5,i * .375+.25,.5);
             itemRenderer.renderStatic(itemStack, ItemDisplayContext.FIXED, packedLight, OverlayTexture.NO_OVERLAY, poseStack, buffer, blockEntity.getLevel(), 0);
             poseStack.popPose();
         }

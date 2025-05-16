@@ -11,6 +11,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import tfar.poolparty.init.ModBlocks;
+import tfar.poolparty.util.BlockColorFamily;
 
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,8 @@ public class ModLootTableProvider extends LootTableProvider {
         protected void generate() {
             dropSelf(ModBlocks.RUBBER_BLOCK);
             dropSelf(ModBlocks.SWIMMING_TUBE_HOLDER);
+
+            BlockColorFamily.POOL_NOODLES.map.values().forEach(this::dropSelf);
         }
 
 
