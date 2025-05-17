@@ -62,7 +62,9 @@ public abstract class FloatingEntity extends Entity {
         this.xo = x;
         this.yo = y;
         this.zo = z;
-        setItem(stack);
+        ItemStack copy = stack.copy();
+        copy.setCount(1);
+        setItem(copy);
     }
 
     @Override

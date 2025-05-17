@@ -1,17 +1,13 @@
 package tfar.poolparty.item;
 
 import net.minecraft.stats.Stats;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Equipable;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
@@ -21,24 +17,16 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import tfar.poolparty.entity.SwimmingTubeEntity;
-import tfar.poolparty.client.PoolPartyClient;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public class SwimmingTubeItem extends Item implements Equipable,Colorable {
+public class SwimmingTubeItem extends FloatingItem {
 
     private static final Predicate<Entity> ENTITY_PREDICATE = EntitySelector.NO_SPECTATORS.and(Entity::isPickable);
-    private final DyeColor color;
 
     public SwimmingTubeItem(Properties properties, DyeColor color) {
-        super(properties);
-        this.color = color;
-    }
-
-    @Override
-    public EquipmentSlot getEquipmentSlot() {
-        return EquipmentSlot.LEGS;
+        super(properties,color,EquipmentSlot.LEGS);
     }
 
     /**
@@ -52,7 +40,7 @@ public class SwimmingTubeItem extends Item implements Equipable,Colorable {
         } else {
             Vec3 vec3 = player.getViewVector(1.0F);
             double d0 = 5.0D;
-            List<Entity> list = level.getEntities(player, player.getBoundingBox().expandTowards(vec3.scale(5.0D)).inflate(1.0D), ENTITY_PREDICATE);
+            List<Entity> list = level.getEntities(player, player.getBoundingBox().expandTowards(vec3.scale(d0)).inflate(1), ENTITY_PREDICATE);
             if (!list.isEmpty()) {
                 Vec3 vec31 = player.getEyePosition();
 
@@ -87,24 +75,9 @@ public class SwimmingTubeItem extends Item implements Equipable,Colorable {
         }
     }
 
-    @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        super.inventoryTick(stack, level, entity, slotId, isSelected);
-        if(slotId == 1 && entity instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.LEGS).is(this) && entity.isInWater() && entity.getFluidHeight(FluidTags.WATER) > entity.getFluidJumpThreshold()) {
-            if (livingEntity instanceof Player player) {
-                if (player.level().isClientSide) {
-                    PoolPartyClient.handleFloating(player);
-                }
-            }
-        }
-    }
+
 
     private SwimmingTubeEntity getTube(Level level, HitResult hitResult,ItemStack stack) {
         return new SwimmingTubeEntity(level, hitResult.getLocation().x, hitResult.getLocation().y, hitResult.getLocation().z,stack);
-    }
-
-    @Override
-    public DyeColor color() {
-        return color;
     }
 }

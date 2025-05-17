@@ -6,12 +6,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import tfar.poolparty.init.ModEntities;
-import tfar.poolparty.init.ModItems;
 
 public class SwimmingTubeEntity extends FloatingEntity{
 
@@ -31,7 +29,7 @@ public class SwimmingTubeEntity extends FloatingEntity{
         if (player.isSecondaryUseActive()) {
             return InteractionResult.PASS;
         } else {
-                InteractionResultHolder<ItemStack> holder = swapWithEquipmentSlot(ModItems.WHITE_SWIMMING_TUBE, level(), player);
+                InteractionResultHolder<ItemStack> holder = swapWithEquipmentSlot(getItem(), level(), player);
                 if (holder.getResult().consumesAction() && !level().isClientSide) {
                     discard();
                 }
@@ -40,21 +38,20 @@ public class SwimmingTubeEntity extends FloatingEntity{
         }
     }
 
-     InteractionResultHolder<ItemStack> swapWithEquipmentSlot(Item item, Level level, Player player) {
-        ItemStack itemstack = ModItems.WHITE_SWIMMING_TUBE.getDefaultInstance();
-        EquipmentSlot equipmentslot = Mob.getEquipmentSlotForItem(itemstack);
+     InteractionResultHolder<ItemStack> swapWithEquipmentSlot(ItemStack stack, Level level, Player player) {
+        EquipmentSlot equipmentslot = Mob.getEquipmentSlotForItem(stack);
         ItemStack itemstack1 = player.getItemBySlot(equipmentslot);
-        if (!EnchantmentHelper.hasBindingCurse(itemstack1) && !ItemStack.matches(itemstack, itemstack1)) {
+        if (!EnchantmentHelper.hasBindingCurse(itemstack1) && !ItemStack.matches(stack, itemstack1)) {
             if (!level.isClientSide()) {
-                player.awardStat(Stats.ITEM_USED.get(item));
+                player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
             }
 
-            ItemStack itemstack2 = itemstack1.isEmpty() ? itemstack : itemstack1.copyAndClear();
-            ItemStack itemstack3 = itemstack.copyAndClear();
+            ItemStack itemstack2 = itemstack1.isEmpty() ? stack : itemstack1.copyAndClear();
+            ItemStack itemstack3 = stack.copyAndClear();
             player.setItemSlot(equipmentslot, itemstack3);
             return InteractionResultHolder.sidedSuccess(itemstack2, level.isClientSide());
         } else {
-            return InteractionResultHolder.fail(itemstack);
+            return InteractionResultHolder.fail(stack);
         }
     }
 }

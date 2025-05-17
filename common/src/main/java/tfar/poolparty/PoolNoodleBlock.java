@@ -2,20 +2,30 @@ package tfar.poolparty;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.IceBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import tfar.poolparty.item.Colorable;
+
+import java.util.List;
 
 public class PoolNoodleBlock extends DirectionalBlock implements Colorable {
     private final DyeColor color;
@@ -39,6 +49,8 @@ public class PoolNoodleBlock extends DirectionalBlock implements Colorable {
         };
     }
 
+
+
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         return this.mayPlaceOn(pos, level,state.getValue(FACING));
@@ -59,6 +71,7 @@ public class PoolNoodleBlock extends DirectionalBlock implements Colorable {
         FluidState fluidstate = level.getFluidState(pos1);
         return fluidstate.getType() == Fluids.WATER || support.getBlock() instanceof IceBlock;
     }
+
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {

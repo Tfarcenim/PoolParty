@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import tfar.poolparty.item.PoolNoodleItem;
+import tfar.poolparty.item.SwimmingTubeItem;
 
 @Mixin(EnchantmentHelper.class)
 public class EnchantmentHelperMixin {
@@ -16,6 +17,9 @@ public class EnchantmentHelperMixin {
     private static void fixLevels(Enchantment enchantment, ItemStack stack, CallbackInfoReturnable<Integer> cir) {
         if (enchantment == Enchantments.KNOCKBACK && stack.getItem() instanceof PoolNoodleItem) {
             cir.setReturnValue(3);
+        }
+        if (enchantment == Enchantments.DEPTH_STRIDER && stack.getItem() instanceof SwimmingTubeItem) {
+            cir.setReturnValue(2);
         }
     }
 }
